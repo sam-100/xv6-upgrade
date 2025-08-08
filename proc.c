@@ -532,3 +532,11 @@ procdump(void)
     cprintf("\n");
   }
 }
+
+
+void sys_greet(void) {
+  char *name;
+  argstr(0, &name);
+
+  cprintf("Hello %s\n", name);
+}

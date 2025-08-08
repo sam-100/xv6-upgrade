@@ -26,6 +26,9 @@ char* sbrk(int);
 int sleep(int);
 int uptime(void);
 
+/* new system calls */
+void greet(const char *name);
+
 // ulib.c
 int stat(const char*, struct stat*);
 char* strcpy(char*, const char*);
