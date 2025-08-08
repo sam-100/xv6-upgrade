@@ -65,6 +65,28 @@ myproc(void) {
   return p;
 }
 
+static int get_smallest_pid() {
+  int pids[NPROC];
+  for(int i=0; i<NPROC; i++)
+    pids[i] = 0;  // mark as free
+  
+  for(struct proc *p=ptable.proc; p < ptable.proc+NPROC; p++) {
+    if(p->state != UNUSED) {
+      pids[p->pid] = 1;
+    }
+  }
+
+  int pid = -1;
+  for(int i=0; i<NPROC; i++) {
+    if(pids[i] == 0) {
+      pid = i;
+      break;
+    }
+  }
+  return pid;
+
+}
+
 //PAGEBREAK: 32
 // Look in the process table for an UNUSED proc.
 // If found, change state to EMBRYO and initialize
@@ -87,7 +109,8 @@ allocproc(void)
 
 found:
   p->state = EMBRYO;
-  p->pid = nextpid++;
+  // p->pid = nextpid++;
+  p->pid = get_smallest_pid();
 
   release(&ptable.lock);
 
