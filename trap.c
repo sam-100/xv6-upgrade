@@ -32,6 +32,15 @@ idtinit(void)
   lidt(idt, sizeof(idt));
 }
 
+static int is_page_lazy(char *addr) {
+  pde_t *pgdir = myproc()->pgdir;
+  if(pgdir[PDX(addr)] & PTE_P == 0)
+    return 0;
+
+  pte_t *pgtable = P2V(PTE_ADDR(pgdir[PDX(addr)]));
+  return ((pgtable[PTX(addr)] & PTE_LAZY) != 0);
+}
+
 //PAGEBREAK: 41
 void
 trap(struct trapframe *tf)
@@ -44,6 +53,32 @@ trap(struct trapframe *tf)
     if(myproc()->killed)
       exit();
     return;
+  }
+
+  if(tf->trapno == T_PGFLT) {
+    struct proc *p = myproc();
+    uint addr = rcr2();
+
+    if(!is_page_lazy(addr))
+      goto kill_process;
+
+    pde_t *pgdir = p->pgdir;
+    pte_t *pgtable = P2V(PTE_ADDR(pgdir[PDX(addr)]));
+    pgtable[PTX(addr)] = 0;
+    uint mem = (uint)kalloc();
+    if(mem == 0) {
+      cprintf("kalloc: out of physical memory!\n");
+      goto kill_process;
+    }
+    
+    pgtable[PTX(addr)] &= ~(PTE_LAZY);
+    pgtable[PTX(addr)] = V2P(mem) | PTE_P | PTE_W | PTE_U;
+    return;
+
+
+  kill_process:
+    cprintf("Page fault: Killing process %d\n", p->pid);
+    exit();
   }
 
   switch(tf->trapno){

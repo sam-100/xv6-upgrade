@@ -109,6 +109,8 @@ extern void sys_greet(void);
 extern int sys_numvp(void);
 extern int sys_numpp(void);
 extern int sys_getptsize(void);
+extern void *sys_mmap(void);
+
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -136,6 +138,7 @@ static int (*syscalls[])(void) = {
 [SYS_numvp]   sys_numvp, 
 [SYS_numpp]   sys_numpp, 
 [SYS_getptsize]   sys_getptsize, 
+[SYS_mmap]    sys_mmap, 
 };
 
 void

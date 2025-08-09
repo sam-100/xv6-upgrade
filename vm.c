@@ -248,6 +248,35 @@ allocuvm(pde_t *pgdir, uint oldsz, uint newsz)
   return newsz;
 }
 
+// Lazy version of allocuvm
+int
+allocuvm_lazy(pde_t *pgdir, uint oldsz, uint newsz) {
+  char *mem;
+  uint a;
+
+  if(newsz >= KERNBASE)
+    return 0;
+  if(newsz < oldsz)
+    return oldsz;
+
+  a = PGROUNDUP(oldsz);
+  for(; a < newsz; a += PGSIZE){
+    if((pgdir[PDX(a)] & PTE_P) == 0) {
+      // allocate new page table here
+      char *mem = kalloc();
+      if(mem == 0)
+        panic("allocuvm_lazy");
+      memset(mem, 0, PGSIZE);
+      pgdir[PDX(a)] = V2P(mem) | PTE_P | PTE_W | PTE_U;
+    }
+
+    pte_t *pgtable = P2V(PTE_ADDR(pgdir[PDX(a)]));
+    pgtable[PTX(a)] = 0;
+    pgtable[PTX(a)] = PTE_W | PTE_U | PTE_LAZY;
+  }
+  return newsz;
+}
+
 // Deallocate user pages to bring the process size from oldsz to
 // newsz.  oldsz and newsz need not be page-aligned, nor does newsz
 // need to be less than oldsz.  oldsz can be larger than the actual
@@ -427,4 +456,17 @@ int sys_getptsize(void) {
       cnt++;
   }
   return cnt + 1;     // 1 for the page directory page
+}
+
+
+void *sys_mmap(void) {
+  int n;
+  if(argint(0, &n) < 0)
+    return -1;
+
+  struct proc *curr_proc = myproc();
+  void *old_addr = curr_proc->sz;
+  if(growproc_lazy(n) < 0)
+    return -1;
+  return old_addr;
 }

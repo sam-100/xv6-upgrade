@@ -35,6 +35,7 @@ void greet(const char *name);
 int numvp();
 int numpp();
 int getptsize();
+void *mmap(int n);
 
 // ulib.c
 int stat(const char*, struct stat*);
