@@ -344,32 +344,42 @@ clearpteu(pde_t *pgdir, char *uva)
 pde_t*
 copyuvm(pde_t *pgdir, uint sz)
 {
-  pde_t *d;
-  pte_t *pte;
-  uint pa, i, flags;
-  char *mem;
-
-  if((d = setupkvm()) == 0)
+  pde_t *new_pgdir;
+  if((new_pgdir = setupkvm()) == 0)
     return 0;
-  for(i = 0; i < sz; i += PGSIZE){
-    if((pte = walkpgdir(pgdir, (void *) i, 0)) == 0)
-      panic("copyuvm: pte should exist");
-    if(!(*pte & PTE_P))
-      panic("copyuvm: page not present");
-    pa = PTE_ADDR(*pte);
-    flags = PTE_FLAGS(*pte);
-    if((mem = kalloc()) == 0)
+  
+  for(int i=0; i<KERNBASE/(PGSIZE*NPTENTRIES); i++) {
+    if((pgdir[i] & PTE_P) == 0)
+      continue;
+    
+    pte_t *pgtable = P2V(PTE_ADDR(pgdir[i]));
+    pte_t *new_pgtable = kalloc();
+    if(new_pgtable == 0)
       goto bad;
-    memmove(mem, (char*)P2V(pa), PGSIZE);
-    if(mappages(d, (void*)i, PGSIZE, V2P(mem), flags) < 0) {
-      kfree(mem);
-      goto bad;
-    }
-  }
-  return d;
+    memmove(new_pgtable, pgtable, PGSIZE);
+    for(int j=0; j<NPTENTRIES; j++) {
+      pte_t pte = pgtable[j];
+      uint flags = (pte & 0xfff);
 
+      if((flags & (PTE_P | PTE_LAZY)) == 0)
+        continue;
+      if(flags & PTE_LAZY) {
+        new_pgtable[j] = flags;
+        continue;
+      }
+      
+      char *mem = kalloc();
+      if(mem == 0)
+        goto bad;
+      memmove(mem, (void*)(i*PGSIZE*NPTENTRIES+j*PGSIZE), PGSIZE);
+      new_pgtable[j] = (V2P(mem) | flags);
+    }
+    new_pgdir[i] = ((uint)V2P(new_pgtable) | PTE_P | PTE_W | PTE_U);
+  }
+
+  return new_pgdir;
 bad:
-  freevm(d);
+  freevm(new_pgdir);
   return 0;
 }
 
@@ -424,7 +434,24 @@ copyout(pde_t *pgdir, uint va, void *p, uint len)
 
 // Walk the page directory and count the total number of valid user page entries from virtual address 0 to 2GB
 int sys_numvp(void) {
-  return myproc()->sz/PGSIZE + 1;
+  struct proc *p = myproc();
+
+  pde_t *pgdir = p->pgdir;
+  int cnt = 0;
+  
+  for(int i=0; i<NPDENTRIES/2; i++) {
+    if((pgdir[i] & PTE_P) == 0)
+      continue;
+    
+    pte_t *pgtable = (pte_t*)P2V(PTE_ADDR(pgdir[i]));
+    for(int j=0; j<NPTENTRIES; j++) {
+      if((pgtable[j] & (PTE_P | PTE_LAZY)) == 0)
+        continue;
+      cnt++;
+    }
+  }
+  return cnt + 1;     // 1 for stack guard page
+  // return myproc()->sz/PGSIZE + 1;
 }
 
 int sys_numpp(void) {
@@ -459,14 +486,37 @@ int sys_getptsize(void) {
 }
 
 
-void *sys_mmap(void) {
+int sys_mmap(void) {
   int n;
-  if(argint(0, &n) < 0)
+  char *start;
+  if(argint(0, (int*)(&start)))
     return -1;
-
+  if(argint(1, &n) < 0)
+    return -1;
+  
   struct proc *curr_proc = myproc();
-  void *old_addr = curr_proc->sz;
-  if(growproc_lazy(n) < 0)
+  // Perform some checks for valid arguments
+  if(n < 0)
     return -1;
-  return old_addr;
+  if(((uint)start & 0xfff) != 0) {
+    cprintf("mmap: start address is not page aligned.\n");
+    return -1;
+  }
+  if(start < curr_proc->sz || start + PGROUNDUP(n) > KERNBASE) {
+    cprintf("mmap: Invalid inputs to mmap(%x, %d).\n", start, n);
+    return -1;
+  }
+
+
+  // Allocate the pages here
+  for(uint p=start; p < start + PGROUNDUP(n); p += PGSIZE) {
+    pte_t *pte = walkpgdir(curr_proc->pgdir, p, 1);
+    if(*pte & PTE_P) {
+      cprintf("mmap: given range of pages are not free.\n");
+      return -1;
+    }
+    *pte = 0 | PTE_LAZY;
+  }
+  
+  return 0;
 }

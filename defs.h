@@ -191,7 +191,7 @@ void            clearpteu(pde_t *pgdir, char *uva);
 int             sys_numvp(void);
 int             sys_numpp(void);
 int             getptsize(void);
-void*           sys_mmap(void);
+int             sys_mmap(void);
 int             allocuvm_lazy(pde_t *pgdir, uint oldsz, uint newsz);
 
 // number of elements in fixed-size array

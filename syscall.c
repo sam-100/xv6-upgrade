@@ -109,7 +109,7 @@ extern void sys_greet(void);
 extern int sys_numvp(void);
 extern int sys_numpp(void);
 extern int sys_getptsize(void);
-extern void *sys_mmap(void);
+extern int sys_mmap(void);
 
 
 static int (*syscalls[])(void) = {
