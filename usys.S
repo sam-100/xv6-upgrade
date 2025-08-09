@@ -31,3 +31,6 @@ SYSCALL(sleep)
 SYSCALL(uptime)
 
 SYSCALL(greet)
+SYSCALL(numvp)
+SYSCALL(numpp)
+SYSCALL(getptsize)

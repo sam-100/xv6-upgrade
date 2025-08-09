@@ -392,3 +392,39 @@ copyout(pde_t *pgdir, uint va, void *p, uint len)
 //PAGEBREAK!
 // Blank page.
 
+
+// Walk the page directory and count the total number of valid user page entries from virtual address 0 to 2GB
+int sys_numvp(void) {
+  return myproc()->sz/PGSIZE + 1;
+}
+
+int sys_numpp(void) {
+  struct proc *p = myproc();
+
+  pde_t *pgdir = p->pgdir;
+  int cnt = 0;
+  
+  for(int i=0; i<NPDENTRIES/2; i++) {
+    if((pgdir[i] & PTE_P) == 0)
+      continue;
+    
+    pte_t *pgtable = (pte_t*)P2V(PTE_ADDR(pgdir[i]));
+    for(int j=0; j<NPTENTRIES; j++) {
+      if((pgtable[j] & PTE_P) == 0)
+        continue;
+      cnt++;
+    }
+  }
+  return cnt + 1;     // 1 for stack guard page
+}
+
+int sys_getptsize(void) {
+  int cnt = 0;
+
+  pde_t *pgdir = myproc()->pgdir;
+  for(int i=0; i<NPDENTRIES; i++) {
+    if(pgdir[i] & PTE_P)
+      cnt++;
+  }
+  return cnt + 1;     // 1 for the page directory page
+}

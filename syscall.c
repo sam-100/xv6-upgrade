@@ -106,6 +106,9 @@ extern int sys_uptime(void);
 
 // new system calls
 extern void sys_greet(void);
+extern int sys_numvp(void);
+extern int sys_numpp(void);
+extern int sys_getptsize(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -130,6 +133,9 @@ static int (*syscalls[])(void) = {
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
 [SYS_greet]   sys_greet, 
+[SYS_numvp]   sys_numvp, 
+[SYS_numpp]   sys_numpp, 
+[SYS_getptsize]   sys_getptsize, 
 };
 
 void

@@ -23,3 +23,6 @@
 
 // new system calls
 #define SYS_greet   22
+#define SYS_numvp   23
+#define SYS_numpp   24
+#define SYS_getptsize   25

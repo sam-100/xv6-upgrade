@@ -3,6 +3,10 @@
 struct stat;
 struct rtcdate;
 
+#define STD_IN 0
+#define STD_OUT 1
+#define STD_ERR 2
+
 // system calls
 int fork(void);
 int exit(void) __attribute__((noreturn));
@@ -28,6 +32,9 @@ int uptime(void);
 
 /* new system calls */
 void greet(const char *name);
+int numvp();
+int numpp();
+int getptsize();
 
 // ulib.c
 int stat(const char*, struct stat*);
