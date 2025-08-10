@@ -502,7 +502,7 @@ int sys_mmap(void) {
     cprintf("mmap: start address is not page aligned.\n");
     return -1;
   }
-  if(start < curr_proc->sz || start + PGROUNDUP(n) > KERNBASE) {
+  if(start + PGROUNDUP(n) > KERNBASE) {
     cprintf("mmap: Invalid inputs to mmap(%x, %d).\n", start, n);
     return -1;
   }
@@ -517,6 +517,51 @@ int sys_mmap(void) {
     }
     *pte = 0 | PTE_LAZY;
   }
-  
+
+  switchuvm(curr_proc);  
   return 0;
+}
+
+int sys_munmap(void) {
+  char *start;
+  int n;    // size 
+  if(argint(0, (int*)&start) < 0)
+    return -1;
+  if(argint(1, &n) < 0)
+    return -1;
+  cprintf("sys_munmap called with arguments: {start = %x, n = %d}\n", start, n);
+
+  // Perform some checks for valid arguments
+  if(n < 0)
+    return -1;
+  if(((uint)start & 0xfff) != 0) {
+    cprintf("munmap: start address is not page aligned.\n");
+    return -1;
+  }
+  if(start + PGROUNDUP(n) > KERNBASE) {
+    cprintf("munmap: Invalid inputs to mmap(%x, %d).\n", start, n);
+    return -1;
+  }
+
+
+  // Iterate over the addresses and de-allocate the pages
+  struct proc *curr_proc = myproc();
+  pde_t *pgdir = curr_proc->pgdir;
+  for(uint addr=start; addr < start+PGROUNDUP(n); addr += PGSIZE) {
+    
+
+    pte_t *pte = walkpgdir(pgdir, addr, 0);
+    if(pte == 0) {
+      cprintf("munmap: Page doesn't exist at address %x\n", addr);
+      return -1;
+    }
+    
+    // de-allocate the page here
+    if(*pte & PTE_P)
+      kfree(P2V(PTE_ADDR(*pte)));
+    *pte = 0;
+  }
+
+  switchuvm(curr_proc);
+
 }

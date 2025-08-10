@@ -193,6 +193,7 @@ int             sys_numpp(void);
 int             getptsize(void);
 int             sys_mmap(void);
 int             allocuvm_lazy(pde_t *pgdir, uint oldsz, uint newsz);
+int             sys_munmap(void);
 
 // number of elements in fixed-size array
 #define NELEM(x) (sizeof(x)/sizeof((x)[0]))

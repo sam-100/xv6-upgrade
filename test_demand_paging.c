@@ -41,7 +41,7 @@ void main(int argc, char **argv) {
     *b = 69;
 
     // 4. Query number of virtual and physical pages again
-    printf(STD_OUT, "After writing to new page 3 and 5, \n");
+    printf(STD_OUT, "After writing to new page 2 and 4, \n");
     printf(STD_OUT, "number of virtual pages = %d\n", numvp());
     printf(STD_OUT, "number of physical pages = %d\n", numpp());
     println(STD_OUT);
@@ -53,10 +53,19 @@ void main(int argc, char **argv) {
         printf(STD_OUT, "number of physical pages = %d\n", numpp());
         printf(STD_OUT, "a points to %c\n", *a);
         printf(STD_OUT, "b points to %d\n", *b);
+        println(STD_OUT);
         exit();
     }
     wait();
-    printf(STD_OUT, "parent resumes\n");
+
+    // 6. Unmapping 2 pages from virtual address space
+    printf(STD_OUT, "Unmapping new page number 2 (addr = %x) and 3 (addr = %x)\n", new_page[2], new_page[3]);
+    if(munmap(new_page[2], PAGESIZE) < 0)
+        error("munmap failed.");
+    if(munmap(new_page[3], PAGESIZE) < 0)
+        error("munmap failed");
+    printf(STD_OUT, "number of virtual pages = %d\n", numvp());
+    printf(STD_OUT, "number of physical pages = %d\n", numpp());
 
     exit();
 }

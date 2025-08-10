@@ -110,6 +110,7 @@ extern int sys_numvp(void);
 extern int sys_numpp(void);
 extern int sys_getptsize(void);
 extern int sys_mmap(void);
+extern int sys_munmap(void);
 
 
 static int (*syscalls[])(void) = {
@@ -139,6 +140,7 @@ static int (*syscalls[])(void) = {
 [SYS_numpp]   sys_numpp, 
 [SYS_getptsize]   sys_getptsize, 
 [SYS_mmap]    sys_mmap, 
+[SYS_munmap]  sys_munmap, 
 };
 
 void

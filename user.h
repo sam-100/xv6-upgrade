@@ -36,6 +36,7 @@ int numvp();
 int numpp();
 int getptsize();
 int mmap(char *start_addr, uint size);
+int munmap(char *start_addr, uint size);
 
 // ulib.c
 int stat(const char*, struct stat*);
