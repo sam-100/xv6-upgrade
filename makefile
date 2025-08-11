@@ -184,7 +184,7 @@ UPROGS=\
 	_helloworld\
 	_util\
 	_greet\
-	_test_demand_paging\
+	_test-demand-paging\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -208,7 +208,7 @@ xv6.pdf: $(PRINT)
 
 print: xv6.pdf
 
-# run in emulators
+# run in emulatorsf
 
 bochs : fs.img xv6.img
 	if [ ! -e .bochsrc ]; then ln -s dot-bochsrc .bochsrc; fi
