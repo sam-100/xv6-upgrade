@@ -185,6 +185,7 @@ UPROGS=\
 	_util\
 	_greet\
 	_test-demand-paging\
+	_test-shared-mem\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)

@@ -9,3 +9,9 @@ void error(const char *msg) {
 void println(int fd) {
     printf(fd, "\n");
 }
+
+void assert(int condn, const char *msg) {
+    if(condn != 0)
+        return;
+    error(msg);
+}
