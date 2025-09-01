@@ -581,3 +581,16 @@ void sys_greet(void) {
 
   cprintf("Hello %s\n", name);
 }
+
+
+int sys_shm_open(void) {
+  return 0;
+}
+
+int sys_shm_get(void) {
+  return 0;
+}
+
+int sys_shm_close(void) {
+  return 0;
+}

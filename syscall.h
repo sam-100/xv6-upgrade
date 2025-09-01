@@ -28,3 +28,6 @@
 #define SYS_getptsize   25
 #define SYS_mmap    26
 #define SYS_munmap  27
+#define SYS_shm_open    28
+#define SYS_shm_get     29
+#define SYS_shm_close   30

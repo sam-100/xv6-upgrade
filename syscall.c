@@ -111,7 +111,9 @@ extern int sys_numpp(void);
 extern int sys_getptsize(void);
 extern int sys_mmap(void);
 extern int sys_munmap(void);
-
+extern int sys_shm_open(void);
+extern int sys_shm_get(void);
+extern int sys_shm_close(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -141,6 +143,9 @@ static int (*syscalls[])(void) = {
 [SYS_getptsize]   sys_getptsize, 
 [SYS_mmap]    sys_mmap, 
 [SYS_munmap]  sys_munmap, 
+[SYS_shm_open]  sys_shm_open, 
+[SYS_shm_get] sys_shm_get, 
+[SYS_shm_close] sys_shm_close, 
 };
 
 void
