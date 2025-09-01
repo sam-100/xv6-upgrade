@@ -1,0 +1,419 @@
+ld: warning: usys.o: missing .note.GNU-stack section implies executable stack
+ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+ld: warning: _cat has a LOAD segment with RWX permissions
+ld: warning: usys.o: missing .note.GNU-stack section implies executable stack
+ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+ld: warning: _echo has a LOAD segment with RWX permissions
+ld: warning: usys.o: missing .note.GNU-stack section implies executable stack
+ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+ld: warning: _forktest has a LOAD segment with RWX permissions
+ld: warning: usys.o: missing .note.GNU-stack section implies executable stack
+ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+ld: warning: _grep has a LOAD segment with RWX permissions
+ld: warning: usys.o: missing .note.GNU-stack section implies executable stack
+ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+ld: warning: _init has a LOAD segment with RWX permissions
+ld: warning: usys.o: missing .note.GNU-stack section implies executable stack
+ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+ld: warning: _kill has a LOAD segment with RWX permissions
+ld: warning: usys.o: missing .note.GNU-stack section implies executable stack
+ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+ld: warning: _ln has a LOAD segment with RWX permissions
+ld: warning: usys.o: missing .note.GNU-stack section implies executable stack
+ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+ld: warning: _ls has a LOAD segment with RWX permissions
+ld: warning: usys.o: missing .note.GNU-stack section implies executable stack
+ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+ld: warning: _mkdir has a LOAD segment with RWX permissions
+ld: warning: usys.o: missing .note.GNU-stack section implies executable stack
+ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+ld: warning: _rm has a LOAD segment with RWX permissions
+sh.c: In function ‘runcmd’:
+sh.c:58:1: warning: infinite recursion detected [-Winfinite-recursion]
+   58 | runcmd(struct cmd *cmd)
+      | ^~~~~~
+sh.c:89:5: note: recursive call
+   89 |     runcmd(rcmd->cmd);
+      |     ^~~~~~~~~~~~~~~~~
+sh.c:109:7: note: recursive call
+  109 |       runcmd(pcmd->left);
+      |       ^~~~~~~~~~~~~~~~~~
+sh.c:116:7: note: recursive call
+  116 |       runcmd(pcmd->right);
+      |       ^~~~~~~~~~~~~~~~~~~
+sh.c:95:7: note: recursive call
+   95 |       runcmd(lcmd->left);
+      |       ^~~~~~~~~~~~~~~~~~
+sh.c:97:5: note: recursive call
+   97 |     runcmd(lcmd->right);
+      |     ^~~~~~~~~~~~~~~~~~~
+sh.c:127:7: note: recursive call
+  127 |       runcmd(bcmd->cmd);
+      |       ^~~~~~~~~~~~~~~~~
+ld: warning: usys.o: missing .note.GNU-stack section implies executable stack
+ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+ld: warning: _sh has a LOAD segment with RWX permissions
+ld: warning: usys.o: missing .note.GNU-stack section implies executable stack
+ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+ld: warning: _stressfs has a LOAD segment with RWX permissions
+ld: warning: usys.o: missing .note.GNU-stack section implies executable stack
+ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+ld: warning: _usertests has a LOAD segment with RWX permissions
+ld: warning: usys.o: missing .note.GNU-stack section implies executable stack
+ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+ld: warning: _wc has a LOAD segment with RWX permissions
+ld: warning: usys.o: missing .note.GNU-stack section implies executable stack
+ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+ld: warning: _zombie has a LOAD segment with RWX permissions
+helloworld.c:4:6: warning: return type of ‘main’ is not ‘int’ [-Wmain]
+    4 | void main(int argc, char **argv) {
+      |      ^~~~
+ld: warning: usys.o: missing .note.GNU-stack section implies executable stack
+ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+ld: warning: _helloworld has a LOAD segment with RWX permissions
+ld: warning: usys.o: missing .note.GNU-stack section implies executable stack
+ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+ld: warning: cannot find entry symbol main; defaulting to 00000000
+ld: warning: _util has a LOAD segment with RWX permissions
+greet.c:3:6: warning: return type of ‘main’ is not ‘int’ [-Wmain]
+    3 | void main(int argc, char **argv) {
+      |      ^~~~
+ld: warning: usys.o: missing .note.GNU-stack section implies executable stack
+ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+ld: warning: _greet has a LOAD segment with RWX permissions
+test-demand-paging.c:4:6: warning: return type of ‘main’ is not ‘int’ [-Wmain]
+    4 | void main(int argc, char **argv) {
+      |      ^~~~
+ld: warning: usys.o: missing .note.GNU-stack section implies executable stack
+ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+ld: warning: _test-demand-paging has a LOAD segment with RWX permissions
+ld: warning: usys.o: missing .note.GNU-stack section implies executable stack
+ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+ld: warning: _test-shared-mem has a LOAD segment with RWX permissions
+ld: warning: bootasm.o: missing .note.GNU-stack section implies executable stack
+ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+ld: warning: bootblock.o has a LOAD segment with RWX permissions
+boot block is 451 bytes (max 510)
+In function ‘mpconfig’,
+    inlined from ‘mpinit’ at mp.c:101:14:
+mp.c:83:10: warning: array subscript -48806446 is outside array bounds of ‘void[2147483647]’ [-Warray-bounds=]
+   83 |   if(conf->version != 1 && conf->version != 4)
+      |      ~~~~^~~~~~~~~
+mp.c:78:34: note: at offset -2147483648 into object ‘*<unknown>.physaddr’ of size [0, 2147483647]
+   78 |   if((mp = mpsearch()) == 0 || mp->physaddr == 0)
+      |                                ~~^~~~~~~~~~
+mp.c:85:28: warning: array subscript -48806446 is outside array bounds of ‘void[2147483647]’ [-Warray-bounds=]
+   85 |   if(sum((uchar*)conf, conf->length) != 0)
+      |                        ~~~~^~~~~~~~
+mp.c:78:34: note: at offset -2147483648 into object ‘*<unknown>.physaddr’ of size [0, 2147483647]
+   78 |   if((mp = mpsearch()) == 0 || mp->physaddr == 0)
+      |                                ~~^~~~~~~~~~
+mp.c: In function ‘mpinit’:
+mp.c:104:22: warning: array subscript -48806446 is outside array bounds of ‘struct mpconf[48806446]’ [-Warray-bounds=]
+  104 |   lapic = (uint*)conf->lapicaddr;
+      |                      ^~
+In function ‘mpconfig’,
+    inlined from ‘mpinit’ at mp.c:101:14:
+mp.c:78:34: note: at offset -2147483648 into object ‘*<unknown>.physaddr’ of size [0, 2147483647]
+   78 |   if((mp = mpsearch()) == 0 || mp->physaddr == 0)
+      |                                ~~^~~~~~~~~~
+mp.c: In function ‘mpinit’:
+mp.c:105:46: warning: array subscript -48806446 is outside array bounds of ‘struct mpconf[48806446]’ [-Warray-bounds=]
+  105 |   for(p=(uchar*)(conf+1), e=(uchar*)conf+conf->length; p<e; ){
+      |                                              ^~
+In function ‘mpconfig’,
+    inlined from ‘mpinit’ at mp.c:101:14:
+mp.c:78:34: note: at offset -2147483648 into object ‘*<unknown>.physaddr’ of size [0, 2147483647]
+   78 |   if((mp = mpsearch()) == 0 || mp->physaddr == 0)
+      |                                ~~^~~~~~~~~~
+In function ‘sum’,
+    inlined from ‘mpconfig’ at mp.c:85:6,
+    inlined from ‘mpinit’ at mp.c:101:14:
+mp.c:25:16: warning: array subscript [-2147483648, -2147418114] is outside array bounds of ‘void[2147483647]’ [-Warray-bounds=]
+   25 |     sum += addr[i];
+      |            ~~~~^~~
+In function ‘mpconfig’,
+    inlined from ‘mpinit’ at mp.c:101:14:
+mp.c:78:34: note: at offset [-2147483648, -2147418114] into object ‘*<unknown>.physaddr’ of size [0, 2147483647]
+   78 |   if((mp = mpsearch()) == 0 || mp->physaddr == 0)
+      |                                ~~^~~~~~~~~~
+proc.c: In function ‘growproc_lazy’:
+proc.c:207:14: warning: returning ‘int’ from a function with return type ‘void *’ makes pointer from integer without a cast [-Wint-conversion]
+  207 |       return -1;
+      |              ^
+proc.c:210:14: warning: returning ‘int’ from a function with return type ‘void *’ makes pointer from integer without a cast [-Wint-conversion]
+  210 |       return -1;
+      |              ^
+syscall.c:140:15: warning: initialization of ‘int (*)(void)’ from incompatible pointer type ‘void (*)(void)’ [-Wincompatible-pointer-types]
+  140 | [SYS_greet]   sys_greet,
+      |               ^~~~~~~~~
+syscall.c:140:15: note: (near initialization for ‘syscalls[22]’)
+trap.c: In function ‘is_page_lazy’:
+trap.c:37:23: warning: suggest parentheses around comparison in operand of ‘&’ [-Wparentheses]
+   37 |   if(pgdir[PDX(addr)] & PTE_P == 0)
+      |                       ^
+trap.c: In function ‘trap’:
+trap.c:62:22: warning: passing argument 1 of ‘is_page_lazy’ makes pointer from integer without a cast [-Wint-conversion]
+   62 |     if(!is_page_lazy(addr))
+      |                      ^~~~
+      |                      |
+      |                      uint {aka unsigned int}
+trap.c:35:31: note: expected ‘char *’ but argument is of type ‘uint’ {aka ‘unsigned int’}
+   35 | static int is_page_lazy(char *addr) {
+      |                         ~~~~~~^~~~
+vm.c: In function ‘allocuvm_lazy’:
+vm.c:254:9: warning: unused variable ‘mem’ [-Wunused-variable]
+  254 |   char *mem;
+      |         ^~~
+vm.c: In function ‘copyuvm’:
+vm.c:356:26: warning: initialization of ‘pte_t *’ {aka ‘unsigned int *’} from incompatible pointer type ‘char *’ [-Wincompatible-pointer-types]
+  356 |     pte_t *new_pgtable = kalloc();
+      |                          ^~~~~~
+vm.c: In function ‘sys_mmap’:
+vm.c:505:27: warning: comparison between pointer and integer
+  505 |   if(start + PGROUNDUP(n) > KERNBASE) {
+      |                           ^
+vm.c:512:14: warning: initialization of ‘uint’ {aka ‘unsigned int’} from ‘char *’ makes integer from pointer without a cast [-Wint-conversion]
+  512 |   for(uint p=start; p < start + PGROUNDUP(n); p += PGSIZE) {
+      |              ^~~~~
+vm.c:512:23: warning: comparison between pointer and integer
+  512 |   for(uint p=start; p < start + PGROUNDUP(n); p += PGSIZE) {
+      |                       ^
+vm.c:513:46: warning: passing argument 2 of ‘walkpgdir’ makes pointer from integer without a cast [-Wint-conversion]
+  513 |     pte_t *pte = walkpgdir(curr_proc->pgdir, p, 1);
+      |                                              ^
+      |                                              |
+      |                                              uint {aka unsigned int}
+vm.c:36:37: note: expected ‘const void *’ but argument is of type ‘uint’ {aka ‘unsigned int’}
+   36 | walkpgdir(pde_t *pgdir, const void *va, int alloc)
+      |                         ~~~~~~~~~~~~^~
+vm.c: In function ‘sys_munmap’:
+vm.c:541:27: warning: comparison between pointer and integer
+  541 |   if(start + PGROUNDUP(n) > KERNBASE) {
+      |                           ^
+vm.c:550:17: warning: initialization of ‘uint’ {aka ‘unsigned int’} from ‘char *’ makes integer from pointer without a cast [-Wint-conversion]
+  550 |   for(uint addr=start; addr < start+PGROUNDUP(n); addr += PGSIZE) {
+      |                 ^~~~~
+vm.c:550:29: warning: comparison between pointer and integer
+  550 |   for(uint addr=start; addr < start+PGROUNDUP(n); addr += PGSIZE) {
+      |                             ^
+vm.c:553:35: warning: passing argument 2 of ‘walkpgdir’ makes pointer from integer without a cast [-Wint-conversion]
+  553 |     pte_t *pte = walkpgdir(pgdir, addr, 0);
+      |                                   ^~~~
+      |                                   |
+      |                                   uint {aka unsigned int}
+vm.c:36:37: note: expected ‘const void *’ but argument is of type ‘uint’ {aka ‘unsigned int’}
+   36 | walkpgdir(pde_t *pgdir, const void *va, int alloc)
+      |                         ~~~~~~~~~~~~^~
+vm.c:567:1: warning: control reaches end of non-void function [-Wreturn-type]
+  567 | }
+      | ^
+In file included from sh_mem.h:4,
+                 from sh_mem.c:1:
+proc.h:3:3: error: unknown type name ‘uchar’
+    3 |   uchar apicid;                // Local APIC ID
+      |   ^~~~~
+proc.h:5:20: error: field ‘ts’ has incomplete type
+    5 |   struct taskstate ts;         // Used by x86 to find stack for interrupt
+      |                    ^~
+proc.h:6:22: error: ‘NSEGS’ undeclared here (not in a function)
+    6 |   struct segdesc gdt[NSEGS];   // x86 global descriptor table
+      |                      ^~~~~
+proc.h:7:12: error: unknown type name ‘uint’
+    7 |   volatile uint started;       // Has the CPU started?
+      |            ^~~~
+proc.h:13:24: error: ‘NCPU’ undeclared here (not in a function)
+   13 | extern struct cpu cpus[NCPU];
+      |                        ^~~~
+proc.h:28:3: error: unknown type name ‘uint’
+   28 |   uint edi;
+      |   ^~~~
+proc.h:29:3: error: unknown type name ‘uint’
+   29 |   uint esi;
+      |   ^~~~
+proc.h:30:3: error: unknown type name ‘uint’
+   30 |   uint ebx;
+      |   ^~~~
+proc.h:31:3: error: unknown type name ‘uint’
+   31 |   uint ebp;
+      |   ^~~~
+proc.h:32:3: error: unknown type name ‘uint’
+   32 |   uint eip;
+      |   ^~~~
+proc.h:39:3: error: unknown type name ‘uint’
+   39 |   uint sz;                     // Size of process memory (bytes)
+      |   ^~~~
+proc.h:40:3: error: unknown type name ‘pde_t’
+   40 |   pde_t* pgdir;                // Page table
+      |   ^~~~~
+proc.h:49:22: error: ‘NOFILE’ undeclared here (not in a function)
+   49 |   struct file *ofile[NOFILE];  // Open files
+      |                      ^~~~~~
+In file included from sh_mem.h:6:
+spinlock.h:3:3: error: unknown type name ‘uint’
+    3 |   uint locked;       // Is the lock held?
+      |   ^~~~
+spinlock.h:8:3: error: unknown type name ‘uint’
+    8 |   uint pcs[10];      // The call stack (an array of program counters)
+      |   ^~~~
+In file included from sh_mem.c:2:
+defs.h:15:8: warning: parameter names (without types) in function declaration
+   15 | struct buf*     bread(uint, uint);
+      |        ^~~
+defs.h:39:47: error: unknown type name ‘uint’; did you mean ‘int’?
+   39 | int             dirlink(struct inode*, char*, uint);
+      |                                               ^~~~
+      |                                               int
+defs.h:40:49: error: unknown type name ‘uint’; did you mean ‘int’?
+   40 | struct inode*   dirlookup(struct inode*, char*, uint*);
+      |                                                 ^~~~
+      |                                                 int
+defs.h:41:29: error: expected ‘)’ before ‘short’
+   41 | struct inode*   ialloc(uint, short);
+      |                             ^~~~~~
+      |                             )
+defs.h:52:45: error: unknown type name ‘uint’; did you mean ‘int’?
+   52 | int             readi(struct inode*, char*, uint, uint);
+      |                                             ^~~~
+      |                                             int
+defs.h:52:51: error: unknown type name ‘uint’; did you mean ‘int’?
+   52 | int             readi(struct inode*, char*, uint, uint);
+      |                                                   ^~~~
+      |                                                   int
+defs.h:54:46: error: unknown type name ‘uint’; did you mean ‘int’?
+   54 | int             writei(struct inode*, char*, uint, uint);
+      |                                              ^~~~
+      |                                              int
+defs.h:54:52: error: unknown type name ‘uint’; did you mean ‘int’?
+   54 | int             writei(struct inode*, char*, uint, uint);
+      |                                                    ^~~~
+      |                                                    int
+defs.h:63:8: error: unknown type name ‘uchar’
+   63 | extern uchar    ioapicid;
+      |        ^~~~~
+defs.h:78:17: error: unknown type name ‘uint’
+   78 | extern volatile uint*    lapic;
+      |                 ^~~~
+defs.h:81:1: warning: parameter names (without types) in function declaration
+   81 | void            lapicstartap(uchar, uint);
+      | ^~~~
+defs.h:132:37: error: unknown type name ‘uint’; did you mean ‘int’?
+  132 | void            getcallerpcs(void*, uint*);
+      |                                     ^~~~
+      |                                     int
+defs.h:146:50: error: unknown type name ‘uint’; did you mean ‘int’?
+  146 | int             memcmp(const void*, const void*, uint);
+      |                                                  ^~~~
+      |                                                  int
+defs.h:147:45: error: unknown type name ‘uint’; did you mean ‘int’?
+  147 | void*           memmove(void*, const void*, uint);
+      |                                             ^~~~
+      |                                             int
+defs.h:148:36: error: unknown type name ‘uint’; did you mean ‘int’?
+  148 | void*           memset(void*, int, uint);
+      |                                    ^~~~
+      |                                    int
+defs.h:151:51: error: unknown type name ‘uint’; did you mean ‘int’?
+  151 | int             strncmp(const char*, const char*, uint);
+      |                                                   ^~~~
+      |                                                   int
+defs.h:158:31: error: expected ‘)’ before ‘int’
+  158 | int             fetchint(uint, int*);
+      |                               ^~~~
+      |                               )
+defs.h:159:31: error: expected ‘)’ before ‘char’
+  159 | int             fetchstr(uint, char**);
+      |                               ^~~~~
+      |                               )
+defs.h:167:8: error: unknown type name ‘uint’
+  167 | extern uint     ticks;
+      |        ^~~~
+defs.h:179:1: error: unknown type name ‘pde_t’
+  179 | pde_t*          setupkvm(void);
+      | ^~~~~
+defs.h:180:24: error: unknown type name ‘pde_t’
+  180 | char*           uva2ka(pde_t*, char*);
+      |                        ^~~~~
+defs.h:181:26: error: unknown type name ‘pde_t’
+  181 | int             allocuvm(pde_t*, uint, uint);
+      |                          ^~~~~
+defs.h:181:34: error: unknown type name ‘uint’; did you mean ‘int’?
+  181 | int             allocuvm(pde_t*, uint, uint);
+      |                                  ^~~~
+      |                                  int
+defs.h:181:40: error: unknown type name ‘uint’; did you mean ‘int’?
+  181 | int             allocuvm(pde_t*, uint, uint);
+      |                                        ^~~~
+      |                                        int
+defs.h:182:28: error: unknown type name ‘pde_t’
+  182 | int             deallocuvm(pde_t*, uint, uint);
+      |                            ^~~~~
+defs.h:182:36: error: unknown type name ‘uint’; did you mean ‘int’?
+  182 | int             deallocuvm(pde_t*, uint, uint);
+      |                                    ^~~~
+      |                                    int
+defs.h:182:42: error: unknown type name ‘uint’; did you mean ‘int’?
+  182 | int             deallocuvm(pde_t*, uint, uint);
+      |                                          ^~~~
+      |                                          int
+defs.h:183:24: error: unknown type name ‘pde_t’
+  183 | void            freevm(pde_t*);
+      |                        ^~~~~
+defs.h:184:25: error: unknown type name ‘pde_t’
+  184 | void            inituvm(pde_t*, char*, uint);
+      |                         ^~~~~
+defs.h:184:40: error: unknown type name ‘uint’; did you mean ‘int’?
+  184 | void            inituvm(pde_t*, char*, uint);
+      |                                        ^~~~
+      |                                        int
+defs.h:185:25: error: unknown type name ‘pde_t’
+  185 | int             loaduvm(pde_t*, char*, struct inode*, uint, uint);
+      |                         ^~~~~
+defs.h:185:55: error: unknown type name ‘uint’; did you mean ‘int’?
+  185 | int             loaduvm(pde_t*, char*, struct inode*, uint, uint);
+      |                                                       ^~~~
+      |                                                       int
+defs.h:185:61: error: unknown type name ‘uint’; did you mean ‘int’?
+  185 | int             loaduvm(pde_t*, char*, struct inode*, uint, uint);
+      |                                                             ^~~~
+      |                                                             int
+defs.h:186:1: error: unknown type name ‘pde_t’
+  186 | pde_t*          copyuvm(pde_t*, uint);
+      | ^~~~~
+defs.h:186:25: error: unknown type name ‘pde_t’
+  186 | pde_t*          copyuvm(pde_t*, uint);
+      |                         ^~~~~
+defs.h:186:33: error: unknown type name ‘uint’; did you mean ‘int’?
+  186 | pde_t*          copyuvm(pde_t*, uint);
+      |                                 ^~~~
+      |                                 int
+defs.h:189:25: error: unknown type name ‘pde_t’
+  189 | int             copyout(pde_t*, uint, void*, uint);
+      |                         ^~~~~
+defs.h:189:33: error: unknown type name ‘uint’; did you mean ‘int’?
+  189 | int             copyout(pde_t*, uint, void*, uint);
+      |                                 ^~~~
+      |                                 int
+defs.h:189:46: error: unknown type name ‘uint’; did you mean ‘int’?
+  189 | int             copyout(pde_t*, uint, void*, uint);
+      |                                              ^~~~
+      |                                              int
+defs.h:190:27: error: unknown type name ‘pde_t’
+  190 | void            clearpteu(pde_t *pgdir, char *uva);
+      |                           ^~~~~
+defs.h:195:31: error: unknown type name ‘pde_t’
+  195 | int             allocuvm_lazy(pde_t *pgdir, uint oldsz, uint newsz);
+      |                               ^~~~~
+defs.h:195:45: error: unknown type name ‘uint’; did you mean ‘int’?
+  195 | int             allocuvm_lazy(pde_t *pgdir, uint oldsz, uint newsz);
+      |                                             ^~~~
+      |                                             int
+defs.h:195:57: error: unknown type name ‘uint’; did you mean ‘int’?
+  195 | int             allocuvm_lazy(pde_t *pgdir, uint oldsz, uint newsz);
+      |                                                         ^~~~
+      |                                                         int
+sh_mem.c: In function ‘shm_add’:
+sh_mem.c:30:27: warning: assignment discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+   30 |       shared_memory[i].pa = pa;
+      |                           ^
+make: *** [<builtin>: sh_mem.o] Error 1
