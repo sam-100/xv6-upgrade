@@ -1,50 +1,50 @@
-8100 #include "types.h"
-8101 #include "x86.h"
-8102 #include "defs.h"
-8103 #include "kbd.h"
-8104 
-8105 int
-8106 kbdgetc(void)
-8107 {
-8108   static uint shift;
-8109   static uchar *charcode[4] = {
-8110     normalmap, shiftmap, ctlmap, ctlmap
-8111   };
-8112   uint st, data, c;
-8113 
-8114   st = inb(KBSTATP);
-8115   if((st & KBS_DIB) == 0)
-8116     return -1;
-8117   data = inb(KBDATAP);
-8118 
-8119   if(data == 0xE0){
-8120     shift |= E0ESC;
-8121     return 0;
-8122   } else if(data & 0x80){
-8123     // Key released
-8124     data = (shift & E0ESC ? data : data & 0x7F);
-8125     shift &= ~(shiftcode[data] | E0ESC);
-8126     return 0;
-8127   } else if(shift & E0ESC){
-8128     // Last character was an E0 escape; or with 0x80
-8129     data |= 0x80;
-8130     shift &= ~E0ESC;
-8131   }
-8132 
-8133   shift |= shiftcode[data];
-8134   shift ^= togglecode[data];
-8135   c = charcode[shift & (CTL | SHIFT)][data];
-8136   if(shift & CAPSLOCK){
-8137     if('a' <= c && c <= 'z')
-8138       c += 'A' - 'a';
-8139     else if('A' <= c && c <= 'Z')
-8140       c += 'a' - 'A';
-8141   }
-8142   return c;
-8143 }
-8144 
-8145 void
-8146 kbdintr(void)
-8147 {
-8148   consoleintr(kbdgetc);
-8149 }
+8200 #include "types.h"
+8201 #include "x86.h"
+8202 #include "defs.h"
+8203 #include "kbd.h"
+8204 
+8205 int
+8206 kbdgetc(void)
+8207 {
+8208   static uint shift;
+8209   static uchar *charcode[4] = {
+8210     normalmap, shiftmap, ctlmap, ctlmap
+8211   };
+8212   uint st, data, c;
+8213 
+8214   st = inb(KBSTATP);
+8215   if((st & KBS_DIB) == 0)
+8216     return -1;
+8217   data = inb(KBDATAP);
+8218 
+8219   if(data == 0xE0){
+8220     shift |= E0ESC;
+8221     return 0;
+8222   } else if(data & 0x80){
+8223     // Key released
+8224     data = (shift & E0ESC ? data : data & 0x7F);
+8225     shift &= ~(shiftcode[data] | E0ESC);
+8226     return 0;
+8227   } else if(shift & E0ESC){
+8228     // Last character was an E0 escape; or with 0x80
+8229     data |= 0x80;
+8230     shift &= ~E0ESC;
+8231   }
+8232 
+8233   shift |= shiftcode[data];
+8234   shift ^= togglecode[data];
+8235   c = charcode[shift & (CTL | SHIFT)][data];
+8236   if(shift & CAPSLOCK){
+8237     if('a' <= c && c <= 'z')
+8238       c += 'A' - 'a';
+8239     else if('A' <= c && c <= 'Z')
+8240       c += 'a' - 'A';
+8241   }
+8242   return c;
+8243 }
+8244 
+8245 void
+8246 kbdintr(void)
+8247 {
+8248   consoleintr(kbdgetc);
+8249 }

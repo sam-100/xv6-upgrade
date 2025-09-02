@@ -1,50 +1,50 @@
-3250 # Context switch
-3251 #
-3252 #   void swtch(struct context **old, struct context *new);
-3253 #
-3254 # Save the current registers on the stack, creating
-3255 # a struct context, and save its address in *old.
-3256 # Switch stacks to new and pop previously-saved registers.
-3257 
-3258 .globl swtch
-3259 swtch:
-3260   movl 4(%esp), %eax
-3261   movl 8(%esp), %edx
-3262 
-3263   # Save old callee-saved registers
-3264   pushl %ebp
-3265   pushl %ebx
-3266   pushl %esi
-3267   pushl %edi
-3268 
-3269   # Switch stacks
-3270   movl %esp, (%eax)
-3271   movl %edx, %esp
-3272 
-3273   # Load new callee-saved registers
-3274   popl %edi
-3275   popl %esi
-3276   popl %ebx
-3277   popl %ebp
-3278   ret
-3279 
-3280 
-3281 
-3282 
-3283 
-3284 
-3285 
-3286 
-3287 
-3288 
-3289 
-3290 
-3291 
-3292 
-3293 
-3294 
-3295 
-3296 
-3297 
-3298 
-3299 
+3350 # Context switch
+3351 #
+3352 #   void swtch(struct context **old, struct context *new);
+3353 #
+3354 # Save the current registers on the stack, creating
+3355 # a struct context, and save its address in *old.
+3356 # Switch stacks to new and pop previously-saved registers.
+3357 
+3358 .globl swtch
+3359 swtch:
+3360   movl 4(%esp), %eax
+3361   movl 8(%esp), %edx
+3362 
+3363   # Save old callee-saved registers
+3364   pushl %ebp
+3365   pushl %ebx
+3366   pushl %esi
+3367   pushl %edi
+3368 
+3369   # Switch stacks
+3370   movl %esp, (%eax)
+3371   movl %edx, %esp
+3372 
+3373   # Load new callee-saved registers
+3374   popl %edi
+3375   popl %esi
+3376   popl %ebx
+3377   popl %ebp
+3378   ret
+3379 
+3380 
+3381 
+3382 
+3383 
+3384 
+3385 
+3386 
+3387 
+3388 
+3389 
+3390 
+3391 
+3392 
+3393 
+3394 
+3395 
+3396 
+3397 
+3398 
+3399 

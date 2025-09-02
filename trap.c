@@ -58,12 +58,19 @@ trap(struct trapframe *tf)
   if(tf->trapno == T_PGFLT) {
     struct proc *p = myproc();
     uint addr = rcr2();
+    
+    pde_t *pgdir = p->pgdir;
+    pde_t *pde = &pgdir[PDX(addr)];
+    if(!(*pde & PTE_P)) {
+      cprintf("Page table not present.\n");
+      goto kill_process;
+    }
+    pte_t *pgtable = P2V(PTE_ADDR(*pde));
+    pte_t *pte = &pgtable[PTX(addr)];
 
     if(!is_page_lazy(addr))
       goto kill_process;
 
-    pde_t *pgdir = p->pgdir;
-    pte_t *pgtable = P2V(PTE_ADDR(pgdir[PDX(addr)]));
     pgtable[PTX(addr)] = 0;
     uint mem = (uint)kalloc();
     if(mem == 0) {
@@ -77,7 +84,7 @@ trap(struct trapframe *tf)
 
 
   kill_process:
-    cprintf("Page fault: Killing process %d\n", p->pid);
+    cprintf("Page fault: (pte = %x)Killing process %d\n", *pte, p->pid);
     exit();
   }
 

@@ -6,87 +6,87 @@
 2555 #include "x86.h"
 2556 #include "proc.h"
 2557 #include "spinlock.h"
-2558 
-2559 struct {
-2560   struct spinlock lock;
-2561   struct proc proc[NPROC];
-2562 } ptable;
-2563 
-2564 static struct proc *initproc;
-2565 
-2566 int nextpid = 1;
-2567 extern void forkret(void);
-2568 extern void trapret(void);
-2569 
-2570 static void wakeup1(void *chan);
-2571 
-2572 void
-2573 pinit(void)
-2574 {
-2575   initlock(&ptable.lock, "ptable");
-2576 }
-2577 
-2578 // Must be called with interrupts disabled
-2579 int
-2580 cpuid() {
-2581   return mycpu()-cpus;
-2582 }
-2583 
-2584 // Must be called with interrupts disabled to avoid the caller being
-2585 // rescheduled between reading lapicid and running through the loop.
-2586 struct cpu*
-2587 mycpu(void)
-2588 {
-2589   int apicid, i;
-2590 
-2591   if(readeflags()&FL_IF)
-2592     panic("mycpu called with interrupts enabled\n");
-2593 
-2594   apicid = lapicid();
-2595   // APIC IDs are not guaranteed to be contiguous. Maybe we should have
-2596   // a reverse map, or reserve a register to store &cpus[i].
-2597   for (i = 0; i < ncpu; ++i) {
-2598     if (cpus[i].apicid == apicid)
-2599       return &cpus[i];
-2600   }
-2601   panic("unknown apicid\n");
-2602 }
-2603 
-2604 // Disable interrupts so that we are not rescheduled
-2605 // while reading proc from the cpu structure
-2606 struct proc*
-2607 myproc(void) {
-2608   struct cpu *c;
-2609   struct proc *p;
-2610   pushcli();
-2611   c = mycpu();
-2612   p = c->proc;
-2613   popcli();
-2614   return p;
-2615 }
-2616 
-2617 static int get_smallest_pid() {
-2618   int pids[NPROC];
-2619   for(int i=0; i<NPROC; i++)
-2620     pids[i] = 0;  // mark as free
-2621 
-2622   for(struct proc *p=ptable.proc; p < ptable.proc+NPROC; p++) {
-2623     if(p->state != UNUSED) {
-2624       pids[p->pid] = 1;
-2625     }
-2626   }
-2627 
-2628   int pid = -1;
-2629   for(int i=0; i<NPROC; i++) {
-2630     if(pids[i] == 0) {
-2631       pid = i;
-2632       break;
-2633     }
-2634   }
-2635   return pid;
-2636 
-2637 }
-2638 
+2558 #include "sh_mem.h"
+2559 
+2560 struct {
+2561   struct spinlock lock;
+2562   struct proc proc[NPROC];
+2563 } ptable;
+2564 
+2565 static struct proc *initproc;
+2566 
+2567 int nextpid = 1;
+2568 extern void forkret(void);
+2569 extern void trapret(void);
+2570 
+2571 static void wakeup1(void *chan);
+2572 
+2573 void
+2574 pinit(void)
+2575 {
+2576   initlock(&ptable.lock, "ptable");
+2577 }
+2578 
+2579 // Must be called with interrupts disabled
+2580 int
+2581 cpuid() {
+2582   return mycpu()-cpus;
+2583 }
+2584 
+2585 // Must be called with interrupts disabled to avoid the caller being
+2586 // rescheduled between reading lapicid and running through the loop.
+2587 struct cpu*
+2588 mycpu(void)
+2589 {
+2590   int apicid, i;
+2591 
+2592   if(readeflags()&FL_IF)
+2593     panic("mycpu called with interrupts enabled\n");
+2594 
+2595   apicid = lapicid();
+2596   // APIC IDs are not guaranteed to be contiguous. Maybe we should have
+2597   // a reverse map, or reserve a register to store &cpus[i].
+2598   for (i = 0; i < ncpu; ++i) {
+2599     if (cpus[i].apicid == apicid)
+2600       return &cpus[i];
+2601   }
+2602   panic("unknown apicid\n");
+2603 }
+2604 
+2605 // Disable interrupts so that we are not rescheduled
+2606 // while reading proc from the cpu structure
+2607 struct proc*
+2608 myproc(void) {
+2609   struct cpu *c;
+2610   struct proc *p;
+2611   pushcli();
+2612   c = mycpu();
+2613   p = c->proc;
+2614   popcli();
+2615   return p;
+2616 }
+2617 
+2618 static int get_smallest_pid() {
+2619   int pids[NPROC];
+2620   for(int i=0; i<NPROC; i++)
+2621     pids[i] = 0;  // mark as free
+2622 
+2623   for(struct proc *p=ptable.proc; p < ptable.proc+NPROC; p++) {
+2624     if(p->state != UNUSED) {
+2625       pids[p->pid] = 1;
+2626     }
+2627   }
+2628 
+2629   int pid = -1;
+2630   for(int i=0; i<NPROC; i++) {
+2631     if(pids[i] == 0) {
+2632       pid = i;
+2633       break;
+2634     }
+2635   }
+2636   return pid;
+2637 
+2638 }
 2639 
 2640 
 2641 
@@ -145,49 +145,49 @@
 2694   memset(p->context, 0, sizeof *p->context);
 2695   p->context->eip = (uint)forkret;
 2696 
-2697   return p;
-2698 }
+2697   p->shm_idx = -1;
+2698   p->shm_va = 0;
 2699 
-2700 
-2701 // Set up first user process.
-2702 void
-2703 userinit(void)
-2704 {
-2705   struct proc *p;
-2706   extern char _binary_initcode_start[], _binary_initcode_size[];
-2707 
-2708   p = allocproc();
-2709 
-2710   initproc = p;
-2711   if((p->pgdir = setupkvm()) == 0)
-2712     panic("userinit: out of memory?");
-2713   inituvm(p->pgdir, _binary_initcode_start, (int)_binary_initcode_size);
-2714   p->sz = PGSIZE;
-2715   memset(p->tf, 0, sizeof(*p->tf));
-2716   p->tf->cs = (SEG_UCODE << 3) | DPL_USER;
-2717   p->tf->ds = (SEG_UDATA << 3) | DPL_USER;
-2718   p->tf->es = p->tf->ds;
-2719   p->tf->ss = p->tf->ds;
-2720   p->tf->eflags = FL_IF;
-2721   p->tf->esp = PGSIZE;
-2722   p->tf->eip = 0;  // beginning of initcode.S
-2723 
-2724   safestrcpy(p->name, "initcode", sizeof(p->name));
-2725   p->cwd = namei("/");
+2700   return p;
+2701 }
+2702 
+2703 
+2704 // Set up first user process.
+2705 void
+2706 userinit(void)
+2707 {
+2708   struct proc *p;
+2709   extern char _binary_initcode_start[], _binary_initcode_size[];
+2710 
+2711   p = allocproc();
+2712 
+2713   initproc = p;
+2714   if((p->pgdir = setupkvm()) == 0)
+2715     panic("userinit: out of memory?");
+2716   inituvm(p->pgdir, _binary_initcode_start, (int)_binary_initcode_size);
+2717   p->sz = PGSIZE;
+2718   memset(p->tf, 0, sizeof(*p->tf));
+2719   p->tf->cs = (SEG_UCODE << 3) | DPL_USER;
+2720   p->tf->ds = (SEG_UDATA << 3) | DPL_USER;
+2721   p->tf->es = p->tf->ds;
+2722   p->tf->ss = p->tf->ds;
+2723   p->tf->eflags = FL_IF;
+2724   p->tf->esp = PGSIZE;
+2725   p->tf->eip = 0;  // beginning of initcode.S
 2726 
-2727   // this assignment to p->state lets other cores
-2728   // run this process. the acquire forces the above
-2729   // writes to be visible, and the lock is also needed
-2730   // because the assignment might not be atomic.
-2731   acquire(&ptable.lock);
-2732 
-2733   p->state = RUNNABLE;
-2734 
-2735   release(&ptable.lock);
-2736 }
+2727   safestrcpy(p->name, "initcode", sizeof(p->name));
+2728   p->cwd = namei("/");
+2729 
+2730   // this assignment to p->state lets other cores
+2731   // run this process. the acquire forces the above
+2732   // writes to be visible, and the lock is also needed
+2733   // because the assignment might not be atomic.
+2734   acquire(&ptable.lock);
+2735 
+2736   p->state = RUNNABLE;
 2737 
-2738 
-2739 
+2738   release(&ptable.lock);
+2739 }
 2740 
 2741 
 2742 
@@ -698,3 +698,103 @@
 3247 
 3248 
 3249 
+3250 static char *map_last_page(uint pa, uint perm) {
+3251   struct proc *p = myproc();
+3252   pde_t *pgdir = p->pgdir;
+3253   for(int i = (KERNBASE >> PDXSHIFT); i >= 0; i--) {
+3254     pde_t *pde = &pgdir[i];
+3255     if(!(*pde & PTE_P)) {
+3256       char *va = kalloc();
+3257       memset(va, 0, PGSIZE);
+3258       *pde = (V2P(va) | PTE_P | PTE_W);    // allocate a new page table
+3259     }
+3260 
+3261     pte_t *pgtable = P2V(PTE_ADDR(*pde));
+3262     for(int j=NPTENTRIES-1; j >= 0; j--) {
+3263       pte_t *pte = &pgtable[j];
+3264       if(*pte & PTE_P)
+3265         continue;
+3266 
+3267       *pte = (pa | PTE_P | perm);         // map the page to page table entry
+3268       return (char*)PGADDR(i, j, 0);
+3269     }
+3270   }
+3271   return 0;
+3272 }
+3273 
+3274 uint sys_shm_open(void) {
+3275   struct proc *p = myproc();
+3276   if(p->shm_va != 0)
+3277     return p->shm_va;
+3278 
+3279   // 1. Map a new virtual page and allocate a physical page to it
+3280   char *va;
+3281   va = kalloc();
+3282   if(va == 0) {
+3283     cprintf("sys_shm_open: kalloc failed");
+3284     return 0;
+3285   }
+3286   uint pa = (uint)V2P(va);
+3287 
+3288   char *uva;
+3289   uva = map_last_page(pa, PTE_U | PTE_W);
+3290   if(uva == 0) {
+3291     cprintf("sys_shm_open: map_last_page failed.");
+3292     return 0;
+3293   }
+3294 
+3295   int idx = shm_add(pa);
+3296   if(idx < 0) {
+3297     cprintf("sys_shm_open: shm_add failed.\n");
+3298     return 0;
+3299   }
+3300   p->shm_va = uva;
+3301   p->shm_idx = idx;
+3302 
+3303   return uva;
+3304 }
+3305 
+3306 uint sys_shm_get(void) {
+3307   struct proc *p = myproc();
+3308   return p->shm_va;
+3309 }
+3310 
+3311 static pte_t *walkpgdir(pde_t *pgdir, char *uva) {
+3312   pde_t *pde = &pgdir[PDX(uva)];
+3313   if(!(*pde & PTE_P))   return 0;
+3314   pte_t *pgtable = P2V(PTE_ADDR(*pde));
+3315   pte_t *pte = &pgtable[PTX(uva)];
+3316   return pte;
+3317   return 0;
+3318 }
+3319 
+3320 int sys_shm_close(void) {
+3321   struct proc *p = myproc();
+3322   if(p->shm_va == 0) {
+3323     cprintf("sys_shm_close: attempted to close non-existing shared memory.");
+3324     return -1;
+3325   }
+3326 
+3327   int idx = p->shm_idx;
+3328   pte_t *pte = walkpgdir(p->pgdir, p->shm_va);
+3329   uint pa = PTE_ADDR(*pte);
+3330   // uint pa = getpa(p->pgdir, p->shm_va);
+3331   char *uva = p->shm_va;
+3332 
+3333   if(shm_remove(pa) < 0) {
+3334     cprintf("sys_shm_close: shm_remove failed.");
+3335     return -1;
+3336   }
+3337   *pte = 0;   // unmap the virtual page in pte
+3338   p->shm_idx = -1;
+3339   p->shm_va = 0;
+3340 }
+3341 
+3342 
+3343 
+3344 
+3345 
+3346 
+3347 
+3348 
+3349 

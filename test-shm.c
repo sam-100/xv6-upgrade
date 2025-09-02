@@ -10,6 +10,7 @@ int main() {
     // 1. Open a shared memory page
     char *shared = shm_open();
     assert(shared != 0, "failed to open shared page.");
+    printf(STD_OUT, "shared page address = %x\n", shared);
 
     // 2. Write on shared memory
     copy_str(shared, str);
@@ -43,6 +44,16 @@ int main() {
     assert(wait() != -1, "Parent process says it has no children.");
     printf(STD_OUT, "In parent process, shared area: %s\n", shared);
 
+
+    f = fork();
+    if(f == 0) {
+        char *shared = shm_get();
+        copy_str(shared, "What's up Mumbai!");
+        exit();
+    } 
+    
+    wait();
+    printf(STD_OUT, "Again, shared memory content: %s\n", shared);
 
     // 6. Close shared memory
     assert(shm_close() == 0, "shm_close() failed.");

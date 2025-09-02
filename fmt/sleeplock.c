@@ -1,100 +1,100 @@
-4850 // Sleeping locks
-4851 
-4852 #include "types.h"
-4853 #include "defs.h"
-4854 #include "param.h"
-4855 #include "x86.h"
-4856 #include "memlayout.h"
-4857 #include "mmu.h"
-4858 #include "proc.h"
-4859 #include "spinlock.h"
-4860 #include "sleeplock.h"
-4861 
-4862 void
-4863 initsleeplock(struct sleeplock *lk, char *name)
-4864 {
-4865   initlock(&lk->lk, "sleep lock");
-4866   lk->name = name;
-4867   lk->locked = 0;
-4868   lk->pid = 0;
-4869 }
-4870 
-4871 void
-4872 acquiresleep(struct sleeplock *lk)
-4873 {
-4874   acquire(&lk->lk);
-4875   while (lk->locked) {
-4876     sleep(lk, &lk->lk);
-4877   }
-4878   lk->locked = 1;
-4879   lk->pid = myproc()->pid;
-4880   release(&lk->lk);
-4881 }
-4882 
-4883 void
-4884 releasesleep(struct sleeplock *lk)
-4885 {
-4886   acquire(&lk->lk);
-4887   lk->locked = 0;
-4888   lk->pid = 0;
-4889   wakeup(lk);
-4890   release(&lk->lk);
-4891 }
-4892 
-4893 
-4894 
-4895 
-4896 
-4897 
-4898 
-4899 
-4900 int
-4901 holdingsleep(struct sleeplock *lk)
-4902 {
-4903   int r;
-4904 
-4905   acquire(&lk->lk);
-4906   r = lk->locked && (lk->pid == myproc()->pid);
-4907   release(&lk->lk);
-4908   return r;
-4909 }
-4910 
-4911 
-4912 
-4913 
-4914 
-4915 
-4916 
-4917 
-4918 
-4919 
-4920 
-4921 
-4922 
-4923 
-4924 
-4925 
-4926 
-4927 
-4928 
-4929 
-4930 
-4931 
-4932 
-4933 
-4934 
-4935 
-4936 
-4937 
-4938 
-4939 
-4940 
-4941 
-4942 
-4943 
-4944 
-4945 
-4946 
-4947 
-4948 
-4949 
+4950 // Sleeping locks
+4951 
+4952 #include "types.h"
+4953 #include "defs.h"
+4954 #include "param.h"
+4955 #include "x86.h"
+4956 #include "memlayout.h"
+4957 #include "mmu.h"
+4958 #include "proc.h"
+4959 #include "spinlock.h"
+4960 #include "sleeplock.h"
+4961 
+4962 void
+4963 initsleeplock(struct sleeplock *lk, char *name)
+4964 {
+4965   initlock(&lk->lk, "sleep lock");
+4966   lk->name = name;
+4967   lk->locked = 0;
+4968   lk->pid = 0;
+4969 }
+4970 
+4971 void
+4972 acquiresleep(struct sleeplock *lk)
+4973 {
+4974   acquire(&lk->lk);
+4975   while (lk->locked) {
+4976     sleep(lk, &lk->lk);
+4977   }
+4978   lk->locked = 1;
+4979   lk->pid = myproc()->pid;
+4980   release(&lk->lk);
+4981 }
+4982 
+4983 void
+4984 releasesleep(struct sleeplock *lk)
+4985 {
+4986   acquire(&lk->lk);
+4987   lk->locked = 0;
+4988   lk->pid = 0;
+4989   wakeup(lk);
+4990   release(&lk->lk);
+4991 }
+4992 
+4993 
+4994 
+4995 
+4996 
+4997 
+4998 
+4999 
+5000 int
+5001 holdingsleep(struct sleeplock *lk)
+5002 {
+5003   int r;
+5004 
+5005   acquire(&lk->lk);
+5006   r = lk->locked && (lk->pid == myproc()->pid);
+5007   release(&lk->lk);
+5008   return r;
+5009 }
+5010 
+5011 
+5012 
+5013 
+5014 
+5015 
+5016 
+5017 
+5018 
+5019 
+5020 
+5021 
+5022 
+5023 
+5024 
+5025 
+5026 
+5027 
+5028 
+5029 
+5030 
+5031 
+5032 
+5033 
+5034 
+5035 
+5036 
+5037 
+5038 
+5039 
+5040 
+5041 
+5042 
+5043 
+5044 
+5045 
+5046 
+5047 
+5048 
+5049 

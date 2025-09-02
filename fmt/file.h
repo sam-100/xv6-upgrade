@@ -1,50 +1,50 @@
-4400 struct file {
-4401   enum { FD_NONE, FD_PIPE, FD_INODE } type;
-4402   int ref; // reference count
-4403   char readable;
-4404   char writable;
-4405   struct pipe *pipe;
-4406   struct inode *ip;
-4407   uint off;
-4408 };
-4409 
-4410 
-4411 // in-memory copy of an inode
-4412 struct inode {
-4413   uint dev;           // Device number
-4414   uint inum;          // Inode number
-4415   int ref;            // Reference count
-4416   struct sleeplock lock; // protects everything below here
-4417   int valid;          // inode has been read from disk?
-4418 
-4419   short type;         // copy of disk inode
-4420   short major;
-4421   short minor;
-4422   short nlink;
-4423   uint size;
-4424   uint addrs[NDIRECT+1];
-4425 };
-4426 
-4427 // table mapping major device number to
-4428 // device functions
-4429 struct devsw {
-4430   int (*read)(struct inode*, char*, int);
-4431   int (*write)(struct inode*, char*, int);
-4432 };
-4433 
-4434 extern struct devsw devsw[];
-4435 
-4436 #define CONSOLE 1
-4437 
-4438 
-4439 
-4440 
-4441 
-4442 
-4443 
-4444 
-4445 
-4446 
-4447 
-4448 
-4449 
+4500 struct file {
+4501   enum { FD_NONE, FD_PIPE, FD_INODE } type;
+4502   int ref; // reference count
+4503   char readable;
+4504   char writable;
+4505   struct pipe *pipe;
+4506   struct inode *ip;
+4507   uint off;
+4508 };
+4509 
+4510 
+4511 // in-memory copy of an inode
+4512 struct inode {
+4513   uint dev;           // Device number
+4514   uint inum;          // Inode number
+4515   int ref;            // Reference count
+4516   struct sleeplock lock; // protects everything below here
+4517   int valid;          // inode has been read from disk?
+4518 
+4519   short type;         // copy of disk inode
+4520   short major;
+4521   short minor;
+4522   short nlink;
+4523   uint size;
+4524   uint addrs[NDIRECT+1];
+4525 };
+4526 
+4527 // table mapping major device number to
+4528 // device functions
+4529 struct devsw {
+4530   int (*read)(struct inode*, char*, int);
+4531   int (*write)(struct inode*, char*, int);
+4532 };
+4533 
+4534 extern struct devsw devsw[];
+4535 
+4536 #define CONSOLE 1
+4537 
+4538 
+4539 
+4540 
+4541 
+4542 
+4543 
+4544 
+4545 
+4546 
+4547 
+4548 
+4549 

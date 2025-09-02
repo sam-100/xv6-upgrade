@@ -1,50 +1,50 @@
-8650 # Initial process execs /init.
-8651 # This code runs in user space.
-8652 
-8653 #include "syscall.h"
-8654 #include "traps.h"
-8655 
-8656 
-8657 # exec(init, argv)
-8658 .globl start
-8659 start:
-8660   pushl $argv
-8661   pushl $init
-8662   pushl $0  // where caller pc would be
-8663   movl $SYS_exec, %eax
-8664   int $T_SYSCALL
-8665 
-8666 # for(;;) exit();
-8667 exit:
-8668   movl $SYS_exit, %eax
-8669   int $T_SYSCALL
-8670   jmp exit
-8671 
-8672 # char init[] = "/init\0";
-8673 init:
-8674   .string "/init\0"
-8675 
-8676 # char *argv[] = { init, 0 };
-8677 .p2align 2
-8678 argv:
-8679   .long init
-8680   .long 0
-8681 
-8682 
-8683 
-8684 
-8685 
-8686 
-8687 
-8688 
-8689 
-8690 
-8691 
-8692 
-8693 
-8694 
-8695 
-8696 
-8697 
-8698 
-8699 
+8750 # Initial process execs /init.
+8751 # This code runs in user space.
+8752 
+8753 #include "syscall.h"
+8754 #include "traps.h"
+8755 
+8756 
+8757 # exec(init, argv)
+8758 .globl start
+8759 start:
+8760   pushl $argv
+8761   pushl $init
+8762   pushl $0  // where caller pc would be
+8763   movl $SYS_exec, %eax
+8764   int $T_SYSCALL
+8765 
+8766 # for(;;) exit();
+8767 exit:
+8768   movl $SYS_exit, %eax
+8769   int $T_SYSCALL
+8770   jmp exit
+8771 
+8772 # char init[] = "/init\0";
+8773 init:
+8774   .string "/init\0"
+8775 
+8776 # char *argv[] = { init, 0 };
+8777 .p2align 2
+8778 argv:
+8779   .long init
+8780   .long 0
+8781 
+8782 
+8783 
+8784 
+8785 
+8786 
+8787 
+8788 
+8789 
+8790 
+8791 
+8792 
+8793 
+8794 
+8795 
+8796 
+8797 
+8798 
+8799 

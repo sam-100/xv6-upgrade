@@ -49,15 +49,15 @@
 2498   struct file *ofile[NOFILE];  // Open files
 2499   struct inode *cwd;           // Current directory
 2500   char name[16];               // Process name (debugging)
-2501 };
-2502 
-2503 // Process memory is laid out contiguously, low addresses first:
-2504 //   text
-2505 //   original data and bss
-2506 //   fixed-size stack
-2507 //   expandable heap
-2508 
-2509 
+2501   int shm_idx;                 // index to shared memory page
+2502   char *shm_va;                // virtual address of shared memory page
+2503 };
+2504 
+2505 // Process memory is laid out contiguously, low addresses first:
+2506 //   text
+2507 //   original data and bss
+2508 //   fixed-size stack
+2509 //   expandable heap
 2510 
 2511 
 2512 

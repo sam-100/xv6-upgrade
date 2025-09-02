@@ -6,6 +6,7 @@
 #include "mmu.h"
 #include "proc.h"
 #include "elf.h"
+#include "sh_mem.h"
 
 extern char data[];  // defined by kernel.ld
 pde_t *kpgdir;  // for use in scheduler()
@@ -286,6 +287,7 @@ deallocuvm(pde_t *pgdir, uint oldsz, uint newsz)
 {
   pte_t *pte;
   uint a, pa;
+  struct proc *p = myproc();
 
   if(newsz >= oldsz)
     return oldsz;
@@ -293,6 +295,11 @@ deallocuvm(pde_t *pgdir, uint oldsz, uint newsz)
   a = PGROUNDUP(newsz);
   for(; a  < oldsz; a += PGSIZE){
     pte = walkpgdir(pgdir, (char*)a, 0);
+    if((p->shm_idx != -1) && (a == p->shm_va)) {
+      uint pa = PTE_ADDR(*pte);
+      shm_remove(pa);
+      continue;
+    }
     if(!pte)
       a = PGADDR(PDX(a) + 1, 0, 0) - PGSIZE;
     else if((*pte & PTE_P) != 0){
@@ -360,11 +367,22 @@ copyuvm(pde_t *pgdir, uint sz)
     for(int j=0; j<NPTENTRIES; j++) {
       pte_t pte = pgtable[j];
       uint flags = (pte & 0xfff);
+      char *uva = PGADDR(i, j, 0);
+      struct proc *p = myproc();
 
-      if((flags & (PTE_P | PTE_LAZY)) == 0)
+      if((flags & (PTE_P | PTE_LAZY)) == 0)     // if its neither present nor lazy page
         continue;
-      if(flags & PTE_LAZY) {
+      if(flags & PTE_LAZY) {                    // if its a lazy page
         new_pgtable[j] = flags;
+        continue;
+      }
+
+      if((p->shm_idx != -1) && (uva == p->shm_va)) {    // adding this section
+        // cprintf("copying page at address %x\n", p->shm_va);
+        new_pgtable[j] = pgtable[j];
+        shm_add(PTE_ADDR(pgtable[j]));
+        // cprintf("pte entry in parent = %x\n", pgtable[j]);
+        // cprintf("pte entry in child = %x\n", new_pgtable[j]);
         continue;
       }
       

@@ -1,100 +1,100 @@
-9550 /* Simple linker script for the JOS kernel.
-9551    See the GNU ld 'info' manual ("info ld") to learn the syntax. */
-9552 
-9553 OUTPUT_FORMAT("elf32-i386", "elf32-i386", "elf32-i386")
-9554 OUTPUT_ARCH(i386)
-9555 ENTRY(_start)
-9556 
-9557 SECTIONS
-9558 {
-9559 	/* Link the kernel at this address: "." means the current address */
-9560         /* Must be equal to KERNLINK */
-9561 	. = 0x80100000;
-9562 
-9563 	.text : AT(0x100000) {
-9564 		*(.text .stub .text.* .gnu.linkonce.t.*)
-9565 	}
-9566 
-9567 	PROVIDE(etext = .);	/* Define the 'etext' symbol to this value */
-9568 
-9569 	.rodata : {
-9570 		*(.rodata .rodata.* .gnu.linkonce.r.*)
-9571 	}
-9572 
-9573 	/* Include debugging information in kernel memory */
-9574 	.stab : {
-9575 		PROVIDE(__STAB_BEGIN__ = .);
-9576 		*(.stab);
-9577 		PROVIDE(__STAB_END__ = .);
-9578 	}
-9579 
-9580 	.stabstr : {
-9581 		PROVIDE(__STABSTR_BEGIN__ = .);
-9582 		*(.stabstr);
-9583 		PROVIDE(__STABSTR_END__ = .);
-9584 	}
-9585 
-9586 	/* Adjust the address for the data segment to the next page */
-9587 	. = ALIGN(0x1000);
-9588 
-9589 	/* Conventionally, Unix linkers provide pseudo-symbols
-9590 	 * etext, edata, and end, at the end of the text, data, and bss.
-9591 	 * For the kernel mapping, we need the address at the beginning
-9592 	 * of the data section, but that's not one of the conventional
-9593 	 * symbols, because the convention started before there was a
-9594 	 * read-only rodata section between text and data. */
-9595 	PROVIDE(data = .);
-9596 
-9597 
-9598 
-9599 
-9600 	/* The data segment */
-9601 	.data : {
-9602 		*(.data)
-9603 	}
-9604 
-9605 	PROVIDE(edata = .);
-9606 
-9607 	.bss : {
-9608 		*(.bss)
-9609 	}
-9610 
-9611 	PROVIDE(end = .);
-9612 
-9613 	/DISCARD/ : {
-9614 		*(.eh_frame .note.GNU-stack)
-9615 	}
-9616 }
-9617 
-9618 
-9619 
-9620 
-9621 
-9622 
-9623 
-9624 
-9625 
-9626 
-9627 
-9628 
-9629 
-9630 
-9631 
-9632 
-9633 
-9634 
-9635 
-9636 
-9637 
-9638 
-9639 
-9640 
-9641 
-9642 
-9643 
-9644 
-9645 
-9646 
-9647 
-9648 
-9649 
+9650 /* Simple linker script for the JOS kernel.
+9651    See the GNU ld 'info' manual ("info ld") to learn the syntax. */
+9652 
+9653 OUTPUT_FORMAT("elf32-i386", "elf32-i386", "elf32-i386")
+9654 OUTPUT_ARCH(i386)
+9655 ENTRY(_start)
+9656 
+9657 SECTIONS
+9658 {
+9659 	/* Link the kernel at this address: "." means the current address */
+9660         /* Must be equal to KERNLINK */
+9661 	. = 0x80100000;
+9662 
+9663 	.text : AT(0x100000) {
+9664 		*(.text .stub .text.* .gnu.linkonce.t.*)
+9665 	}
+9666 
+9667 	PROVIDE(etext = .);	/* Define the 'etext' symbol to this value */
+9668 
+9669 	.rodata : {
+9670 		*(.rodata .rodata.* .gnu.linkonce.r.*)
+9671 	}
+9672 
+9673 	/* Include debugging information in kernel memory */
+9674 	.stab : {
+9675 		PROVIDE(__STAB_BEGIN__ = .);
+9676 		*(.stab);
+9677 		PROVIDE(__STAB_END__ = .);
+9678 	}
+9679 
+9680 	.stabstr : {
+9681 		PROVIDE(__STABSTR_BEGIN__ = .);
+9682 		*(.stabstr);
+9683 		PROVIDE(__STABSTR_END__ = .);
+9684 	}
+9685 
+9686 	/* Adjust the address for the data segment to the next page */
+9687 	. = ALIGN(0x1000);
+9688 
+9689 	/* Conventionally, Unix linkers provide pseudo-symbols
+9690 	 * etext, edata, and end, at the end of the text, data, and bss.
+9691 	 * For the kernel mapping, we need the address at the beginning
+9692 	 * of the data section, but that's not one of the conventional
+9693 	 * symbols, because the convention started before there was a
+9694 	 * read-only rodata section between text and data. */
+9695 	PROVIDE(data = .);
+9696 
+9697 
+9698 
+9699 
+9700 	/* The data segment */
+9701 	.data : {
+9702 		*(.data)
+9703 	}
+9704 
+9705 	PROVIDE(edata = .);
+9706 
+9707 	.bss : {
+9708 		*(.bss)
+9709 	}
+9710 
+9711 	PROVIDE(end = .);
+9712 
+9713 	/DISCARD/ : {
+9714 		*(.eh_frame .note.GNU-stack)
+9715 	}
+9716 }
+9717 
+9718 
+9719 
+9720 
+9721 
+9722 
+9723 
+9724 
+9725 
+9726 
+9727 
+9728 
+9729 
+9730 
+9731 
+9732 
+9733 
+9734 
+9735 
+9736 
+9737 
+9738 
+9739 
+9740 
+9741 
+9742 
+9743 
+9744 
+9745 
+9746 
+9747 
+9748 
+9749 

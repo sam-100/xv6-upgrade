@@ -5,32 +5,32 @@ Thus there is a convenient relationship between line numbers and sheet numbers.
 
 
 # basic headers		# system calls		
-01 types.h		34 traps.h		# string operations
-01 param.h		34 vectors.pl		71 string.c
-02 memlayout.h		35 trapasm.S		
-02 defs.h		35 trap.c		# low-level hardware
-05 x86.h		37 syscall.h		73 mp.h
-07 asm.h		38 syscall.c		74 mp.c
-07 mmu.h		40 sysproc.c		76 lapic.c
-09 elf.h					78 ioapic.c
-10 date.h		# file system		79 kbd.h
-			41 buf.h		81 kbd.c
-# entering xv6		41 sleeplock.h		81 console.c
-10 entry.S		42 fcntl.h		85 uart.c
-11 entryother.S		42 stat.h		
-12 main.c		43 fs.h			# user-level
-			44 file.h		86 initcode.S
-# locks			44 ide.c		87 usys.S
-15 spinlock.h		46 bio.c		87 init.c
-16 spinlock.c		48 sleeplock.c		88 sh.c
-			49 log.c		
-# processes		52 fs.c			# bootloader
-17 vm.c			61 file.c		93 bootasm.S
-24 proc.h		63 sysfile.c		94 bootmain.c
-25 proc.c		68 exec.c		
-32 swtch.S					# link
-33 kalloc.c		# pipes			95 kernel.ld
-			70 pipe.c
+01 types.h		35 traps.h		# string operations
+01 param.h		35 vectors.pl		72 string.c
+02 memlayout.h		36 trapasm.S		
+02 defs.h		36 trap.c		# low-level hardware
+05 x86.h		38 syscall.h		74 mp.h
+07 asm.h		39 syscall.c		75 mp.c
+07 mmu.h		41 sysproc.c		77 lapic.c
+09 elf.h					79 ioapic.c
+10 date.h		# file system		80 kbd.h
+			42 buf.h		82 kbd.c
+# entering xv6		42 sleeplock.h		82 console.c
+10 entry.S		43 fcntl.h		86 uart.c
+11 entryother.S		43 stat.h		
+12 main.c		44 fs.h			# user-level
+			45 file.h		87 initcode.S
+# locks			45 ide.c		88 usys.S
+15 spinlock.h		47 bio.c		88 init.c
+16 spinlock.c		49 sleeplock.c		89 sh.c
+			50 log.c		
+# processes		53 fs.c			# bootloader
+17 vm.c			62 file.c		94 bootasm.S
+24 proc.h		64 sysfile.c		95 bootmain.c
+25 proc.c		69 exec.c		
+33 swtch.S					# link
+34 kalloc.c		# pipes			96 kernel.ld
+			71 pipe.c
 
 
 The source listing is preceded by a cross-reference that lists every defined 

@@ -6,6 +6,7 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
+#include "sh_mem.h"
 
 struct {
   struct spinlock lock;
@@ -135,6 +136,9 @@ found:
   memset(p->context, 0, sizeof *p->context);
   p->context->eip = (uint)forkret;
 
+  p->shm_idx = -1;
+  p->shm_va = 0;
+
   return p;
 }
 
@@ -252,6 +256,8 @@ fork(void)
   safestrcpy(np->name, curproc->name, sizeof(curproc->name));
 
   pid = np->pid;
+  np->shm_idx = curproc->shm_idx;
+  np->shm_va = curproc->shm_va;
 
   acquire(&ptable.lock);
 
@@ -582,15 +588,98 @@ void sys_greet(void) {
   cprintf("Hello %s\n", name);
 }
 
+static char *map_last_page(uint pa, uint perm) {
+  struct proc *p = myproc();
+  pde_t *pgdir = p->pgdir;
 
-int sys_shm_open(void) {
+  int max_pde = (KERNBASE >> PDXSHIFT) - 1;
+  for(int i = max_pde; i >= 0; i--) {
+    pde_t *pde = &pgdir[i];
+    if(!(*pde & PTE_P)) {
+      pte_t *pgtable = (pte_t*)kalloc();
+      if(pgtable == 0)
+        return 0;
+      memset(pgtable, 0, PGSIZE);
+      *pde = (V2P(pgtable) | PTE_P | PTE_W | PTE_U);    // allocate a new page table
+    }
+
+    pte_t *pgtable = (pte_t*)P2V(PTE_ADDR(pgdir[i]));
+    for(int j=NPTENTRIES-1; j >= 0; j--) {
+      pte_t *pte = &pgtable[j];
+      if(*pte & PTE_P)
+        continue;
+      
+      *pte = (pa | PTE_P | perm);         // map the page to page table entry
+      switchuvm(p);
+      return (char*)PGADDR(i, j, 0);
+    }
+  }
   return 0;
 }
 
-int sys_shm_get(void) {
-  return 0;
+uint sys_shm_open(void) {
+  struct proc *p = myproc();
+  if(p->shm_va != 0)
+    return p->shm_va;
+  
+  // 1. Map a new virtual page and allocate a physical page to it
+  char *va;
+  va = kalloc();
+  if(va == 0) {
+    cprintf("sys_shm_open: kalloc failed");
+    return 0;
+  }
+  uint pa = (uint)V2P(va);
+  
+  char *uva;
+  uva = map_last_page(pa, PTE_U | PTE_W);
+  if(uva == 0) {
+    cprintf("sys_shm_open: map_last_page failed.");
+    return 0;
+  }
+
+  int idx = shm_add(pa);
+  if(idx < 0) {
+    cprintf("sys_shm_open: shm_add failed.\n");
+    return 0;
+  }
+  p->shm_va = uva;
+  p->shm_idx = idx;
+
+  return uva;
+}
+
+uint sys_shm_get(void) {
+  struct proc *p = myproc();
+  return p->shm_va;
+}
+
+static pte_t *walkpgdir(pde_t *pgdir, char *uva) {
+  pde_t pde = pgdir[PDX(uva)];
+  if(!(pde & PTE_P))
+    return 0;
+  pte_t *pgtable = P2V(PTE_ADDR(pde));
+  return &pgtable[PTX(uva)];
 }
 
 int sys_shm_close(void) {
-  return 0;
+  struct proc *p = myproc();
+  if(p->shm_va == 0) {
+    cprintf("sys_shm_close: attempted to close non-existing shared memory.");
+    return -1;
+  }
+
+  int idx = p->shm_idx;
+  pte_t *pte = walkpgdir(p->pgdir, p->shm_va);
+  uint pa = PTE_ADDR(*pte);
+  // uint pa = getpa(p->pgdir, p->shm_va);
+  char *uva = p->shm_va;
+
+  if(shm_remove(pa) < 0) {
+    cprintf("sys_shm_close: shm_remove failed.");
+    return -1;
+  }
+  *pte = 0;   // unmap the virtual page in pte
+  p->shm_idx = -1;
+  p->shm_va = 0;
 }

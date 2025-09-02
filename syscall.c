@@ -111,8 +111,8 @@ extern int sys_numpp(void);
 extern int sys_getptsize(void);
 extern int sys_mmap(void);
 extern int sys_munmap(void);
-extern int sys_shm_open(void);
-extern int sys_shm_get(void);
+extern uint sys_shm_open(void);
+extern uint sys_shm_get(void);
 extern int sys_shm_close(void);
 
 static int (*syscalls[])(void) = {
