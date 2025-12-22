@@ -15,12 +15,30 @@ strcpy(char *s, const char *t)
   return os;
 }
 
+// compares two null terminated strings in lexiographical order.
+// returns 0 if equal, +ve if first is greater than second, and -ve otherwise.
 int
 strcmp(const char *p, const char *q)
 {
-  while(*p && *p == *q)
-    p++, q++;
-  return (uchar)*p - (uchar)*q;
+  printf(STD_OUT, "strcmp %s %s\n", p, q);
+  // while(*p && *p == *q)
+  //   p++, q++;
+  // return (uchar)*p - (uchar)*q;
+
+  while(*p != 0 && *q != 0) {
+    if(*p < *q)
+      return -1;
+    if(*p > *q)
+      return 1;
+    p++;  q++;
+  }
+
+  if(*p == 0 && *q == 0)
+    return 0;
+  if(*p == 0)
+    return -1;
+  else 
+    return 1;
 }
 
 uint

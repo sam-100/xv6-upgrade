@@ -114,6 +114,8 @@ extern int sys_munmap(void);
 extern uint sys_shm_open(void);
 extern uint sys_shm_get(void);
 extern int sys_shm_close(void);
+extern uint sys_va_to_pa(void);
+extern int sys_cow_fork(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -146,6 +148,8 @@ static int (*syscalls[])(void) = {
 [SYS_shm_open]  sys_shm_open, 
 [SYS_shm_get] sys_shm_get, 
 [SYS_shm_close] sys_shm_close, 
+[SYS_va_to_pa] sys_va_to_pa, 
+[SYS_cow_fork]  sys_cow_fork, 
 };
 
 void

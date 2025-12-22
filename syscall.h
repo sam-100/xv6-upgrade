@@ -31,3 +31,5 @@
 #define SYS_shm_open    28
 #define SYS_shm_get     29
 #define SYS_shm_close   30
+#define SYS_va_to_pa    31
+#define SYS_cow_fork    32

@@ -40,6 +40,8 @@ int munmap(char *start_addr, uint size);
 char *shm_open(void);
 char *shm_get(void);
 int shm_close(void);
+unsigned int va_to_pa(unsigned int va);
+int cow_fork(void);
 
 // ulib.c
 int stat(const char*, struct stat*);

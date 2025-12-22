@@ -123,6 +123,7 @@ void            yield(void);
 
 void            greet(void);
 void*           growproc_lazy(int);
+int             sys_cow_fork(void);
 
 // swtch.S
 void            swtch(struct context**, struct context*);

@@ -583,3 +583,26 @@ int sys_munmap(void) {
   switchuvm(curr_proc);
 
 }
+
+
+uint
+sys_va_to_pa(void) {
+  uint va;
+  argint(0, &va);
+
+  // cprintf("va_to_pa system call called on virtual address: %p\n", va);
+
+  pde_t *pgdir = myproc()->pgdir;
+  pte_t *pte = walkpgdir(pgdir, va, 0);
+
+  if(pte == 0) {
+    cprintf("sys_va_to_pa: Error: page table entry not found \n");
+    return 0;
+  }
+
+
+  uint pa = PTE_ADDR(*pte);     // here we get the base address of the physical page
+  pa += (va & 0xfff);     // here we add the offset, to get exact physical address
+
+  return pa;
+}

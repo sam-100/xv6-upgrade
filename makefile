@@ -201,6 +201,7 @@ UPROGS=\
 	_test-demand-paging\
 	_test-shm\
 	_test-shm2\
+	_test-cow-fork\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
