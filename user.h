@@ -42,6 +42,9 @@ char *shm_get(void);
 int shm_close(void);
 unsigned int va_to_pa(unsigned int va);
 int cow_fork(void);
+int thread_create(void *(*start_routine)(void*), void *argument);
+int thread_join(int th_id);
+void thread_exit();
 
 // ulib.c
 int stat(const char*, struct stat*);

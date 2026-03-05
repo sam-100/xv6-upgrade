@@ -33,3 +33,6 @@
 #define SYS_shm_close   30
 #define SYS_va_to_pa    31
 #define SYS_cow_fork    32
+#define SYS_thread_create   33
+#define SYS_thread_join     34
+#define SYS_thread_exit     35

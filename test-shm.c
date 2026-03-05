@@ -42,18 +42,19 @@ int main() {
 
     // 5. Wait for child to exit, and then read shared memory
     assert(wait() != -1, "Parent process says it has no children.");
-    printf(STD_OUT, "In parent process, shared area: %s\n", shared);
+    printf(STD_OUT, "In parent process, shared area: \"%s\"\n", shared);
 
 
     f = fork();
     if(f == 0) {
         char *shared = shm_get();
         copy_str(shared, "What's up Mumbai!");
+        printf(STD_OUT, "Child2: modified shared memory to: \"%s\"\n", shared);
         exit();
     } 
     
     wait();
-    printf(STD_OUT, "Again, shared memory content: %s\n", shared);
+    printf(STD_OUT, "Again, shared memory content: \"%s\"\n", shared);
 
     // 6. Close shared memory
     assert(shm_close() == 0, "shm_close() failed.");

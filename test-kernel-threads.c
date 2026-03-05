@@ -12,11 +12,13 @@ int main() {
     int tid1, tid2;
     int arg1 = 1, arg2 = 2;
 
-    tid1 = clone(thread_func, &arg1);
-    tid2 = clone(thread_func, &arg2);
+    tid1 = thread_create(thread_func, &arg1);
+    assert(tid1 != -1, "Error: failed to create new thread.\n");
+    tid2 = thread_create(thread_func, &arg2);
+    assert(tid2 != -1, "Error: failed to create new thread.\n");
 
-    thread_join(tid1);
-    thread_join(tid2);
+    assert(thread_join(tid1) == 0, "Failed to join thread");
+    assert(thread_join(tid2) == 0, "Failed to join thread");
 
     printf(1, "All threads finished\n");
     println(1);

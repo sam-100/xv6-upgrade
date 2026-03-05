@@ -202,6 +202,7 @@ UPROGS=\
 	_test-shm\
 	_test-shm2\
 	_test-cow-fork\
+	_test-kernel-threads\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
